@@ -23,7 +23,7 @@ var Music = Parse.Object.extend('Music')
 $('form').submit(function() {
 
 	// // Create a new instance of your Music class 
-	// var music = new Music();
+	var music = new Music();
 
 	// //var musicValue = $('#bandName').val();
 	// // For each input element, set a property of your new instance equal to the input's value
@@ -43,8 +43,11 @@ $('form').submit(function() {
 		music.set($(this).attr('id'), $(this).val());
 		$(this).val('');
 	})
+	music.save(null, {
+		success:getData
+	});
 
-	return false
+	return false;
 })
 
 
@@ -52,16 +55,19 @@ $('form').submit(function() {
 // Write a function to get data
 var getData = function() {
 	
-
+	console.log('getData')
 	// Set up a new query for our Music class
-
+	var query = new Parse.Query(Music);
 
 	// Set a parameter for your query -- where the website property isn't missing
-
+	query.notEqualTo('website', '');
 
 	/* Execute the query using ".find".  When successful:
 	    - Pass the returned data into your buildList function
 	*/
+	query.find({
+		success:buildList
+	});
 }
 
 // A function to build your list
